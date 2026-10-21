@@ -1,0 +1,21 @@
+
+> build
+> vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 3 modules transformed.
+rendering chunks...
+computing gzip size...
+public/build/manifest.json                                          2.49 kB │ gzip: 0.40 kB
+public/build/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2    10.25 kB
+public/build/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2     11.23 kB
+public/build/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2      18.74 kB
+public/build/assets/inter-greek-wght-normal-CkhJZR-_.woff2         18.99 kB
+public/build/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2  25.96 kB
+public/build/assets/inter-latin-wght-normal-Dx4kXJAl.woff2         48.25 kB
+public/build/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2     85.06 kB
+public/build/assets/app-BaQh21Qi.css                               35.84 kB │ gzip: 9.07 kB
+public/build/assets/app-CfQQk5_9.js                                 1.92 kB │ gzip: 0.75 kB
+
+✓ built in 534ms

@@ -1,0 +1,101 @@
+name: vp-developer-hub
+x-hub: &hub
+  build:
+    context: .
+    target: production
+  restart: unless-stopped
+  environment: &hub-env
+    APP_NAME: VP Developer Hub
+    APP_ENV: production
+    APP_DEBUG: 'false'
+    APP_KEY: ${APP_KEY:?Set a permanent Laravel APP_KEY}
+    APP_URL: ${APP_URL:-https://hub.valeriopersiani.it}
+    APP_LOCALE: it
+    DB_CONNECTION: pgsql
+    DB_HOST: database
+    DB_PORT: 5432
+    DB_DATABASE: ${DB_DATABASE:-vp_hub}
+    DB_USERNAME: ${DB_USERNAME:-vp_hub}
+    DB_PASSWORD: ${DB_PASSWORD:?Set a strong database password}
+    SESSION_DRIVER: database
+    SESSION_LIFETIME: 120
+    SESSION_ENCRYPT: 'true'
+    SESSION_SECURE_COOKIE: 'true'
+    SESSION_SAME_SITE: lax
+    CACHE_STORE: database
+    QUEUE_CONNECTION: database
+    LOG_CHANNEL: stderr
+    LOG_LEVEL: warning
+    TRUSTED_PROXIES: ${TRUSTED_PROXIES:-}
+    MAIL_MAILER: ${MAIL_MAILER:-log}
+    MAIL_SCHEME: ${MAIL_SCHEME:-smtp}
+    MAIL_HOST: ${MAIL_HOST:-localhost}
+    MAIL_PORT: ${MAIL_PORT:-587}
+    MAIL_USERNAME: ${MAIL_USERNAME:-}
+    MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+    MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-hub@valeriopersiani.it}
+    MAIL_FROM_NAME: VP Developer Hub
+    HUB_EMAIL_NOTIFICATIONS: ${HUB_EMAIL_NOTIFICATIONS:-false}
+    HUB_UPLOAD_MAX_KB: 10240
+    HUB_AUDIT_RETENTION_DAYS: ${HUB_AUDIT_RETENTION_DAYS:-730}
+    HUB_SESSION_RETENTION_DAYS: ${HUB_SESSION_RETENTION_DAYS:-7}
+  volumes:
+    - hub-storage:/var/www/html/storage
+  depends_on:
+    database:
+      condition: service_healthy
+  stop_grace_period: 120s
+services:
+  web:
+    <<: *hub
+    expose:
+      - '80'
+    environment:
+      <<: *hub-env
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-false}
+    healthcheck:
+      test: ['CMD', 'curl', '-fsS', 'http://localhost/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+  worker:
+    <<: *hub
+    depends_on:
+      database:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    command: ['php', 'artisan', 'queue:work', '--sleep=3', '--tries=3', '--timeout=90', '--max-time=3600']
+    healthcheck:
+      disable: true
+  scheduler:
+    <<: *hub
+    depends_on:
+      database:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    command: ['php', 'artisan', 'schedule:work']
+    healthcheck:
+      disable: true
+  database:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-vp_hub}
+      POSTGRES_USER: ${DB_USERNAME:-vp_hub}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set a strong database password}
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - hub-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    stop_grace_period: 60s
+volumes:
+  hub-storage:
+  hub-postgres:

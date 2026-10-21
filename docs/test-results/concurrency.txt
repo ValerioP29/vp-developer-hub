@@ -1,0 +1,4 @@
+PASS timer: one accepted, one rejected, independent PostgreSQL connections.
+PASS manual: one accepted, one rejected, independent PostgreSQL connections.
+PASS correction: one accepted, one rejected, independent PostgreSQL connections.
+PASS unique running timer, overlap rejection and optimistic correction.

@@ -1,0 +1,21 @@
+{
+  "result": "passed",
+  "source": "isolated demo database",
+  "target": "isolated restore test database",
+  "format": "PostgreSQL custom pg_dump",
+  "tables_checked": {
+    "tenants": 3,
+    "users": 3,
+    "contracts": 3,
+    "activations": 18,
+    "interventions": 57,
+    "time_entries": 54,
+    "tickets": 5,
+    "documents": 2,
+    "summaries": 15,
+    "audit_logs": 177
+  },
+  "matching_counts": true,
+  "private_files_restored": 5,
+  "all_file_sha256_match": true
+}

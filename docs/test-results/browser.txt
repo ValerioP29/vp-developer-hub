@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:79236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/hub.spec.js:28:1 › client desktop: dashboard, privacy, exports and documents (6.4s)
+  ✓  2 tests/browser/hub.spec.js:35:1 › client mobile: navigation, no horizontal overflow and dark mode (4.4s)
+  ✓  3 tests/browser/hub.spec.js:41:1 › client creates request, comments and uploads private attachment (5.2s)
+  ✓  4 tests/browser/hub.spec.js:47:1 › admin enrollment, dashboard and entity CRUD in real browser (5.9s)
+  ✓  5 tests/browser/hub.spec.js:52:1 › accessibility: login and light/dark dashboard have no serious or critical violations (10.5s)
+  ✓  6 tests/browser/hub.spec.js:57:1 › security: CSRF is enforced by the live HTTP server (254ms)
+
+  6 passed (37.4s)

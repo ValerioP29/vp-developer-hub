@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'./tests/browser',fullyParallel:false,workers:1,timeout:45000,reporter:[['list'],['html',{open:'never',outputFolder:'storage/app/playwright-report'}]],use:{baseURL:process.env.HUB_TEST_URL||'http://127.0.0.1:8080',headless:true,viewport:{width:1440,height:1050},colorScheme:'light',locale:'it-IT',timezoneId:'Europe/Rome',trace:'retain-on-failure',screenshot:'only-on-failure'},outputDir:'storage/app/browser-results'});
