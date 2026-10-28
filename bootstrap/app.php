@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Middleware\HubAccess;
@@ -14,6 +15,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust proxy headers only from configured proxies.
+        $trustedProxies = env('TRUSTED_PROXIES', '');
+
+        if (is_string($trustedProxies) && trim($trustedProxies) !== '') {
+            $middleware->trustProxies(
+                at: array_map('trim', explode(',', $trustedProxies)),
+                headers: Request::HEADER_X_FORWARDED_FOR
+                    | Request::HEADER_X_FORWARDED_HOST
+                    | Request::HEADER_X_FORWARDED_PORT
+                    | Request::HEADER_X_FORWARDED_PROTO,
+            );
+        }
+
         $middleware->append(SecurityHeaders::class);
         $middleware->alias(['hub' => HubAccess::class]);
         $middleware->redirectGuestsTo('/login');
