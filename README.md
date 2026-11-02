@@ -1,6 +1,6 @@
 # VP Developer Hub
 
-Portale privato multi-cliente di **Valerio Persiani Developer**. Applicazione Laravel con frontend Blade personalizzato, PostgreSQL, autenticazione Fortify e MFA TOTP. Nessuna connessione ai gestionali dei clienti.
+Portale privato multi-cliente di **Valerio Persiani Developer**. Applicazione Laravel con frontend Blade personalizzato, PostgreSQL, autenticazione Fortify con email o username e password. Nessuna connessione ai gestionali dei clienti.
 
 ## Cosa contiene
 
@@ -39,7 +39,7 @@ php artisan hub:create-admin
 php artisan serve --host=127.0.0.1 --port=8080
 ```
 
-Aprire `http://127.0.0.1:8080`. La password amministratore viene richiesta senza mostrarla nel terminale. Al primo accesso è obbligatoria la configurazione MFA, con conferma del codice TOTP. Conservare i codici di recupero. Non esiste registrazione pubblica.
+Aprire `http://127.0.0.1:8080`. La password amministratore viene richiesta senza mostrarla nel terminale. Accedi con email o username e password. Lo username è distinto dal nome visualizzato; il comando mostra quello assegnato e accetta `--username=nome.scelto`. Non esiste registrazione pubblica.
 
 Per lo sviluppo, in terminali separati:
 
@@ -59,8 +59,6 @@ php artisan hub:demo --credentials-file=storage/app/demo-credentials.txt
 Solo `APP_ENV=local` o `testing`. Crea tre aziende fittizie, i cinque applicativi GED richiesti come **anagrafiche dimostrative**, contratti, sei mesi di attività e richieste. Le attivazioni demo sono esplicitamente create dal comando demo; il seed ordinario installa soltanto categorie e catalogo e non applica canoni a clienti reali.
 
 Account: `admin@vp-hub.test`, `cliente@vp-hub.test`, `utente@vp-hub.test`. Le password sono casuali, diverse per account e scritte nel file privato con permessi `0600`, escluso dal repository. Non sono nel README. Se la demo esiste, il comando si interrompe senza sovrascriverla.
-
-I test browser configurano realmente la MFA dell’amministratore demo: dopo una nuova esecuzione il segreto di collaudo rimane in `storage/app/browser-mfa-secret.txt` (privato, escluso da Git). Usarlo nell’app TOTP esclusivamente per l’account demo; accedendo a `/security` si possono conservare i codici di recupero o riconfigurare MFA. Per questa consegna la configurazione MFA di collaudo è stata revocata: al primo accesso amministratore configura la tua app. Non usare account o segreti demo in produzione.
 
 ## Test
 
@@ -88,9 +86,11 @@ npx playwright install --with-deps chromium
 npx playwright test
 ```
 
-I test browser aggiungono dati fittizi e configurano MFA all’account demo. Report in `storage/app/playwright-report`, screenshot di consegna in `docs/screenshots`. Non usare l’URL di produzione come `HUB_TEST_URL`.
+I test browser aggiungono dati fittizi in un ambiente locale dedicato. Report in `storage/app/playwright-report`, screenshot e tracce in `storage/app/browser-results` (esclusi da Git). `HUB_TEST_CREDENTIALS` permette di indicare un file credenziali privato alternativo. Non usare l’URL di produzione come `HUB_TEST_URL`. Per un server di test dietro proxy locale fidato, `HUB_TEST_PROXY_CLIENTS=true` separa gli IP simulati dei test senza disattivare il rate limiting; configurare `TRUSTED_PROXIES=127.0.0.1` solo su quel server locale.
 
 Esiti effettivamente rilevati e limiti di verifica: [TEST-REPORT.md](docs/TEST-REPORT.md).
+
+Migrazione e rilascio della semplificazione accessi: [IMPLEMENTATION-REPORT.md](IMPLEMENTATION-REPORT.md). Per personalizzare uno username esistente: `php artisan hub:set-username email@azienda.it nome.scelto`. Le password esistenti restano valide.
 
 ## Documentazione
 

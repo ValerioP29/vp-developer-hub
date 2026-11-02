@@ -1,5 +1,7 @@
 # Consegna locale
 
+> Documento storico della prima consegna locale. Per la correzione e il rilascio sulla produzione Coolify già esistente, vedere [IMPLEMENTATION-REPORT.md](../IMPLEMENTATION-REPORT.md). Non ricreare repository o infrastruttura seguendo questo documento.
+
 ## Applicazione
 
 Workspace: `/home/persi/projects/Valerio/vp_developer_hub`.
@@ -9,8 +11,6 @@ L’applicazione è stata avviata su **http://127.0.0.1:8080**. PostgreSQL dedic
 `storage/app/demo-credentials.txt`
 
 Account amministratore: `admin@vp-hub.test`. Account cliente amministratore: `cliente@vp-hub.test`. Account utente cliente: `utente@vp-hub.test`.
-
-**Al primo accesso amministratore va configurata MFA.** La configurazione usata dal collaudo browser è stata revocata, con invalidazione delle sessioni del solo admin demo. Il cliente può accedere con la propria password ed eventualmente configurare MFA in Sicurezza.
 
 Il server di collaudo è locale e il database è temporaneo, con autenticazione trust limitata all’istanza dimostrativa in loopback. Non è una configurazione per dati reali. Dopo riavvio/rimozione dei file temporanei, ripetere il setup con un database dedicato persistente e autenticazione password come descritto nel README. La configurazione di produzione Compose usa password e volumi persistenti.
 
@@ -36,7 +36,7 @@ git clone /percorso/vp-developer-hub.bundle vp-developer-hub
 cd vp-developer-hub
 ```
 
-Né bundle né archivio contengono `.env`, password demo, database, upload, log, segreti MFA, dipendenze installate o tracce browser. I lock file e gli screenshot senza segreti sono inclusi. Per installare dipendenze e compilare asset seguire il README.
+Né bundle né archivio contengono `.env`, password demo, database, upload, log, segreti di autenticazione, dipendenze installate o tracce browser. I lock file e gli screenshot senza segreti sono inclusi. Per installare dipendenze e compilare asset seguire il README.
 
 ## GitHub e infrastruttura
 

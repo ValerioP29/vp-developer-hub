@@ -2,9 +2,9 @@
 
 ## Oggetti da proteggere
 
-1. PostgreSQL: schema, dati, autorizzazioni applicative, audit, password cifrate/hash e segreti MFA cifrati.
+1. PostgreSQL: schema, dati, autorizzazioni applicative, audit, hash delle password e dati riservati di autenticazione.
 2. `storage/app/private`: documenti e versioni, logo compreso.
-3. `APP_KEY` permanente e configurazione dei servizi, custodite separatamente in secret store cifrato. Perdere `APP_KEY` impedisce di decifrare MFA e sessioni. Rigenerarla durante un ripristino non risolve il problema.
+3. `APP_KEY` permanente e configurazione dei servizi, custodite separatamente in secret store cifrato. Perdere `APP_KEY` impedisce di decifrare i dati cifrati e le sessioni. Rigenerarla durante un ripristino non risolve il problema.
 4. Sorgenti, `composer.lock`, `package-lock.json`, versione dell’immagine e configurazione dello stack.
 
 Cache, viste compilate, sessioni scadute e log non sostituiscono un backup applicativo. I backup contengono dati riservati: cifrare e limitare accessi e retention anche delle copie esterne.
@@ -31,7 +31,7 @@ Creare uno stack di staging dedicato, senza email in uscita e senza DNS pubblico
 
 **Il comando sostituisce i dati nel target Compose corrente.** La conferma esplicita è obbligatoria. Prima, salvare il target e verificare di non essere nello stack di altri software. Il comando controlla i checksum, ferma gli scrittori, ripristina PostgreSQL e documenti, esegue le migrazioni necessarie e riavvia i servizi. In caso di errore si ferma mantenendo l’app offline: leggere il log e correggere prima di riavviare.
 
-Verificare health, accesso/MFA, due aziende separate, download di documenti di versioni diverse, riepiloghi, importi e numero di registrazioni. Se il ripristino usa una release diversa verificare la compatibilità delle migrazioni; il backup non autorizza automaticamente un downgrade di schema.
+Verificare health, accesso con email e username, due aziende separate, download di documenti di versioni diverse, riepiloghi, importi e numero di registrazioni. Se il ripristino usa una release diversa verificare la compatibilità delle migrazioni; il backup non autorizza automaticamente un downgrade di schema.
 
 ## Prova senza Docker
 

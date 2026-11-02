@@ -42,7 +42,7 @@ In Compose sessioni, cache e coda usano il DB. Il worker usa timeout 90 secondi 
 2. Impostare tutte le variabili e controllare i volumi. Conservare `APP_KEY` e password DB fuori dal repository.
 3. Eseguire la build in staging. Per una prima inizializzazione si può abilitare temporaneamente `RUN_MIGRATIONS=true` soltanto sul servizio web. In alternativa avviare il database ed eseguire `docker compose run --rm web php artisan migrate --force` come passaggio esplicito di rilascio.
 4. Eseguire `php artisan db:seed --force` nel container web: solo catalogo e categorie. **Non** usare `hub:demo` in produzione.
-5. Eseguire interattivamente `php artisan hub:create-admin`. Configurare MFA al primo accesso e conservare i codici di recupero.
+5. Eseguire interattivamente `php artisan hub:create-admin`. È possibile scegliere lo username con `--username=nome.scelto`; accedere con email o username e password.
 6. Configurare dominio del servizio web sulla porta interna 80. DNS e HTTPS richiedono un intervento autorizzato: record del sottodominio verso la VPS, certificato valido in Coolify, Cloudflare TLS **Full (strict)** se il proxy Cloudflare è usato. Non modificare record di altri servizi.
 7. Controllare che Laravel riconosca HTTPS attraverso il proxy; verificare cookie `Secure`, header HSTS, assenza di redirect a HTTP e link delle email con dominio corretto.
 8. Verificare `/health`: controlla disponibilità database e presenza dello schema applicativo richiesto, senza esporre dettagli. Solo il servizio web è instradato dal proxy; worker e scheduler non devono avere un dominio.
@@ -50,6 +50,8 @@ In Compose sessioni, cache e coda usano il DB. Il worker usa timeout 90 secondi 
 10. Creare i clienti reali, testare due tenant diversi e completare un backup/ripristino isolato prima di aprire gli accessi.
 
 ## Rilasci successivi
+
+Per la correzione della pagina bianca e la migrazione username del 2 novembre 2026 seguire [IMPLEMENTATION-REPORT.md](../IMPLEMENTATION-REPORT.md), inclusa la migrazione prima dell’apertura del traffico.
 
 Eseguire CI, backup e prova in staging. Applicare migrazioni con `php artisan migrate --force --isolated` usando un solo processo. Riavviare web/worker/scheduler sulla stessa versione; non mischiare release durante modifiche di schema incompatibili. L’entrypoint aggiorna cache di configurazione, route e viste e non modifica DNS o crea utenti. `RUN_MIGRATIONS` torna a `false` dopo il rilascio.
 

@@ -43,7 +43,6 @@ abstract class HubTestCase extends TestCase
         Carbon::setTestNow('2026-10-20 12:00:00');
         CarbonImmutable::setTestNow('2026-10-20 12:00:00');
         $this->admin = User::create(['name' => 'Admin Test', 'email' => 'admin@example.test', 'password' => 'Test-Password!123', 'role' => 'super_admin']);
-        $this->admin->forceFill(['two_factor_confirmed_at' => now()])->save();
         $this->actingAs($this->admin);
         $this->tenant = Tenant::create(['name' => 'Alpha Demo', 'slug' => 'alpha', 'status' => 'active']);
         $this->other = Tenant::create(['name' => 'Beta Demo', 'slug' => 'beta', 'status' => 'active']);

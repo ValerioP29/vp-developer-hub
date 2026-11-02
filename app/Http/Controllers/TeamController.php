@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\Audit;
+use App\Support\Username;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
@@ -29,7 +30,10 @@ class TeamController extends Controller
     public function store(Request $request)
     {
         $this->allowed();
-        $data = $request->validate(['name' => 'required|string|max:100', 'email' => 'required|email|max:180|unique:users', 'tenant_id' => 'nullable|integer', 'role' => ['required', Rule::in(auth()->user()->isAdmin() ? ['client_admin', 'client_user'] : ['client_user'])]]);
+        if (is_string($request->input('username'))) {
+            $request->merge(['username' => strtolower(trim($request->input('username')))]);
+        }
+        $data = $request->validate(['username' => Username::rules(), 'name' => 'required|string|max:100', 'email' => 'required|email|max:180|unique:users', 'tenant_id' => 'nullable|integer', 'role' => ['required', Rule::in(auth()->user()->isAdmin() ? ['client_admin', 'client_user'] : ['client_user'])]]);
         $tenantId = auth()->user()->isAdmin() ? (int) ($data['tenant_id'] ?? 0) : auth()->user()->tenant_id;
         Tenant::findOrFail($tenantId);
         $data['tenant_id'] = $tenantId;
@@ -69,6 +73,6 @@ class TeamController extends Controller
         abort_if($user->isAdmin(), 403);
         Password::sendResetLink(['email' => $user->email]);
 
-        return back()->with('notice','Procedura di recupero password inviata.');
+        return back()->with('notice', 'Procedura di recupero password inviata.');
     }
 }

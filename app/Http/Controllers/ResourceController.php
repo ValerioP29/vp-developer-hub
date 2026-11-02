@@ -190,6 +190,6 @@ class ResourceController extends Controller
             }
         });
 
-        return redirect(in_array($resource,['interventions', 'tickets']) ? "/$resource/{$record->id}" : "/manage/$resource")->with('notice','Dati salvati.');
+        return redirect(in_array($resource, ['interventions', 'tickets']) ? "/$resource/{$record->id}" : "/manage/$resource")->with('notice', 'Dati salvati.');
     }
 }

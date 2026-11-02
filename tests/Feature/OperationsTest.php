@@ -101,8 +101,8 @@ class OperationsTest extends HubTestCase
     {
         Auth::logout();
         for ($i = 0; $i < 5; $i++) {
-            $this->post('/login', ['email' => 'bad@example.test', 'password' => 'wrong']);
-        }$response = $this->post('/login', ['email' => 'bad@example.test', 'password' => 'wrong']);
+            $this->post('/login', ['login' => 'bad@example.test', 'password' => 'wrong']);
+        }$response = $this->post('/login', ['login' => 'bad@example.test', 'password' => 'wrong']);
         $response->assertStatus(429);
     }
 

@@ -83,7 +83,7 @@ class Demo extends Command
             }
             Auth::logout();
         });
-        $content = "VP Developer Hub — credenziali DEMO locali\n\nadmin@vp-hub.test: {$passwords['admin']}\ncliente@vp-hub.test: {$passwords['client']}\nutente@vp-hub.test: {$passwords['user']}\n\nMFA da configurare al primo accesso amministratore. Non utilizzare in produzione.\n";
+        $content = "VP Developer Hub — credenziali DEMO locali\n\nadmin@vp-hub.test: {$passwords['admin']}\ncliente@vp-hub.test: {$passwords['client']}\nutente@vp-hub.test: {$passwords['user']}\n\nNon utilizzare in produzione.\n";
         if ($path = $this->option('credentials-file')) {
             file_put_contents($path, $content);
             chmod($path, 0600);

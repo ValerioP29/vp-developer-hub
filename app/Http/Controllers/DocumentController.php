@@ -87,6 +87,6 @@ class DocumentController extends Controller
         $this->authorizeDocument($document);
         abort_unless($document->category === 'logo' && in_array($document->mime, ['image/png', 'image/jpeg']), 404);
 
-        return response()->file(Storage::disk('local')->path($document->path),['Content-Type' => $document->mime]);
+        return response()->file(Storage::disk('local')->path($document->path), ['Content-Type' => $document->mime]);
     }
 }

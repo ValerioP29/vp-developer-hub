@@ -67,6 +67,6 @@ class DataLifecycleTest extends HubTestCase
         $this->artisan('hub:tenant-data', ['tenant' => $this->tenant->id, '--purge' => true, '--confirm' => 'DELETE:alpha'])->assertSuccessful();
         $this->assertDatabaseMissing('tenants', ['id' => $this->tenant->id]);
         $this->assertDatabaseHas('tenants', ['id' => $this->other->id]);
-        $this->assertDatabaseHas('users',['id' => $this->otherClient->id]);
+        $this->assertDatabaseHas('users', ['id' => $this->otherClient->id]);
     }
 }

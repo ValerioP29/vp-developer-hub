@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
-use PragmaRX\Google2FA\Google2FA;
 
 class AccessTest extends HubTestCase
 {
@@ -28,7 +27,7 @@ class AccessTest extends HubTestCase
     public function test_password_login_and_logout(): void
     {
         Auth::logout();
-        $this->post('/login', ['email' => $this->client->email, 'password' => 'Test-Password!123'])->assertRedirect('/dashboard');
+        $this->post('/login', ['login' => $this->client->email, 'password' => 'Test-Password!123'])->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($this->client);
         $this->post('/logout')->assertRedirect('/');
         $this->assertGuest();
@@ -37,7 +36,7 @@ class AccessTest extends HubTestCase
     public function test_wrong_password_is_rejected(): void
     {
         Auth::logout();
-        $this->post('/login', ['email' => $this->client->email, 'password' => 'wrong'])->assertSessionHasErrors('email');
+        $this->post('/login', ['login' => $this->client->email, 'password' => 'wrong'])->assertSessionHasErrors('login');
         $this->assertGuest();
     }
 
@@ -47,10 +46,9 @@ class AccessTest extends HubTestCase
         $this->post('/register', [])->assertNotFound();
     }
 
-    public function test_admin_must_enroll_mfa(): void
+    public function test_admin_can_access_dashboard_without_enrollment(): void
     {
-        $this->admin->forceFill(['two_factor_confirmed_at' => null])->save();
-        $this->get('/dashboard')->assertRedirect('/security');
+        $this->get('/dashboard')->assertOk();
     }
 
     public function test_suspended_tenant_cannot_login_or_reuse_session(): void
@@ -58,7 +56,7 @@ class AccessTest extends HubTestCase
         $this->tenant->update(['status' => 'suspended']);
         $this->actingAs($this->client)->get('/dashboard')->assertRedirect('/login');
         $this->assertGuest();
-        $this->post('/login', ['email' => $this->client->email, 'password' => 'Test-Password!123'])->assertSessionHasErrors();
+        $this->post('/login', ['login' => $this->client->email, 'password' => 'Test-Password!123'])->assertSessionHasErrors();
     }
 
     public function test_client_scope_and_idor_protection(): void
@@ -161,15 +159,12 @@ class AccessTest extends HubTestCase
         $this->assertTrue(Hash::check('New-Strong!234', $this->client->fresh()->password));
     }
 
-    public function test_mfa_challenge_required_for_enrolled_account(): void
+    public function test_previously_enrolled_account_logs_in_directly(): void
     {
-        $secret = (new Google2FA)->generateSecretKey();
-        $this->client->forceFill(['two_factor_secret' => encrypt($secret), 'two_factor_recovery_codes' => encrypt(json_encode(['recovery-test-code'])), 'two_factor_confirmed_at' => now()])->save();
+        $this->client->forceFill(['two_factor_secret' => encrypt('obsolete-test-value'), 'two_factor_recovery_codes' => encrypt('[]'), 'two_factor_confirmed_at' => now()])->save();
         Auth::logout();
-        $this->post('/login', ['email' => $this->client->email, 'password' => 'Test-Password!123'])->assertRedirect('/two-factor-challenge');
-        $this->assertGuest();
-        $this->post('/two-factor-challenge', ['recovery_code' => 'recovery-test-code'])->assertRedirect('/dashboard');
+        $this->post('/login', ['login' => $this->client->email, 'password' => 'Test-Password!123'])->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($this->client);
-        $this->assertNotContains('recovery-test-code',$this->client->fresh()->recoveryCodes());
+        $this->get('/dashboard')->assertOk();
     }
 }

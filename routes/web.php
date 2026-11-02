@@ -12,7 +12,7 @@ use App\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', fn () => redirect(auth()->check() ? '/dashboard' : '/login'));
 Route::get('/health', function () {
     try {
         DB::table('activations')->limit(1)->get(['id', 'carried_remainder_seconds']);
@@ -22,9 +22,6 @@ Route::get('/health', function () {
         return response()->json(['status' => 'unavailable'], 503);
     }
 })->middleware('throttle:30,1');
-Route::middleware('auth')->group(function () {
-    Route::get('/security', fn () => view('hub.security'))->name('security')->middleware('password.confirm');
-});
 Route::middleware(['auth', 'hub', 'throttle:hub'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/clienti/{slug}', function (string $slug) {

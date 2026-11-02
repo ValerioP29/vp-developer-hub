@@ -15,10 +15,7 @@ class HubAccess
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('/login')->withErrors(['email' => 'Accesso non disponibile. Contatta l’amministratore.']);
-        }
-        if ($user->isAdmin() && ! $user->two_factor_confirmed_at) {
-            return redirect('/security')->with('notice', 'Configura l’autenticazione a due fattori per accedere al centro operativo.');
+            return redirect('/login')->withErrors(['login' => __('auth.failed')]);
         }
 
         return $next($request);

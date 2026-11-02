@@ -4,7 +4,7 @@ Monolite Laravel 13 / PHP 8.4, PostgreSQL 16+, Blade e Tailwind. Pannello ammini
 
 ## Confini di sicurezza
 
-`tenant_id` identifica l'azienda. Scope Eloquent fail-closed, autorizzazioni server per capacità e vincoli relazionali composti impediscono associazioni fra aziende. L'amministratore globale opera su tutti i tenant; amministratori e utenti cliente soltanto sul proprio. File su disco privato, scaricati tramite controller autorizzato. Nessuna registrazione pubblica. Fortify gestisce login, reset password e MFA TOTP; MFA obbligatoria per super admin.
+`tenant_id` identifica l'azienda. Scope Eloquent fail-closed, autorizzazioni server per capacità e vincoli relazionali composti impediscono associazioni fra aziende. L'amministratore globale opera su tutti i tenant; amministratori e utenti cliente soltanto sul proprio. File su disco privato, scaricati tramite controller autorizzato. Nessuna registrazione pubblica. Fortify gestisce login con email o username e password e recupero password. Lo username è un identificativo globale univoco, distinto da nome visualizzato ed email; l’indice `LOWER(username)` impedisce duplicati indipendentemente dalle maiuscole. Gli account esistenti ricevono `user-<id>` con una migrazione additiva.
 
 ## Contabilità e tempo
 
@@ -44,7 +44,7 @@ erDiagram
     TENANTS ||--o{ AUDIT_LOGS : tracciabilita
 ```
 
-`User::allowed()` centralizza le capacità dei tre ruoli; `HubAccess` verifica account/azienda attivi e MFA amministratore a ogni richiesta del workspace. `TenantModel` applica scope di lettura e identificativo tenant per creazione cliente; i controller verificano esplicitamente le relazioni prima di scrivere. `Tenant` usa uno scope sul proprio ID. `User` non ha uno scope globale per consentire login: tutte le operazioni di team filtrano esplicitamente tenant e ruoli ammessi.
+`User::allowed()` centralizza le capacità dei tre ruoli; `HubAccess` verifica account/azienda attivi a ogni richiesta del workspace. `TenantModel` applica scope di lettura e identificativo tenant per creazione cliente; i controller verificano esplicitamente le relazioni prima di scrivere. `Tenant` usa uno scope sul proprio ID. `User` non ha uno scope globale per consentire login: tutte le operazioni di team filtrano esplicitamente tenant e ruoli ammessi.
 
 `ResourceController` usa una definizione chiusa delle risorse e dei campi (`Support/Resources.php`): l’URL non può selezionare classi o tabelle arbitrarie. Le logiche economiche e di tempo restano in servizi dedicati e non vengono affidate al CRUD generico. Non sono esposte API pubbliche o token API nella prima versione: il frontend leggero usa endpoint web con sessione e CSRF.
 

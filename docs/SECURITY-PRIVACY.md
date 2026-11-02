@@ -2,9 +2,9 @@
 
 ## Controlli implementati
 
-- Nessuna registrazione pubblica. Login e reset password con Laravel Fortify; password robuste al reset/creazione admin; TOTP e codici di recupero, obbligatori per Super Admin.
+- Nessuna registrazione pubblica. Login e reset password con Laravel Fortify; password robuste al reset/creazione admin; accesso con email o username univoco e password.
 - Sessioni su database, cifratura della sessione, rotazione login/logout, cookie HttpOnly e SameSite. Cookie Secure in produzione; revoca sessioni dopo reset o disabilitazione da gestione utenti.
-- CSRF per richieste browser e rate limiting per login, MFA, upload, reset e operazioni applicative.
+- CSRF per richieste browser e rate limiting per login, upload, reset e operazioni applicative.
 - Scope tenant fail-closed: senza identità autenticata non si leggono modelli tenant. Solo il Super Admin opera globalmente. I comandi di sistema usano bypass espliciti e non sono endpoint pubblici.
 - Verifiche per capacità e ruolo su ogni controller, verifica proprietario per registrazioni e referenti, vincoli composti per relazioni fra risorse dello stesso tenant. Lo slug è un riferimento, non un’autorizzazione.
 - Input validato, output Blade escapato, CSV neutralizzato contro formule, PDF senza PHP/JavaScript o risorse remote.
@@ -43,7 +43,7 @@ Da terminale autorizzato:
 php artisan hub:tenant-data ID --export=/percorso/privato/cliente.zip
 ```
 
-Esporta dati e documenti/versioni in ZIP con permessi restrittivi; non esporta password, sessioni, segreti MFA o percorsi dei file. **È un’esportazione amministrativa, include note interne e audit:** rivedere pertinenza e destinatario prima di consegnarla a terzi. L’app non invia automaticamente il file al cliente.
+Esporta dati e documenti/versioni in ZIP con permessi restrittivi; non esporta password, sessioni, dati di autenticazione riservati o percorsi dei file. **È un’esportazione amministrativa, include note interne e audit:** rivedere pertinenza e destinatario prima di consegnarla a terzi. L’app non invia automaticamente il file al cliente.
 
 Per cancellare, verificare identità e autorità del richiedente, finalità residue, necessità di conservazione e backup. Archiviare prima il cliente. Eseguire l’anteprima (nessuna modifica) e poi, soltanto con decisione autorizzata:
 
@@ -56,4 +56,4 @@ Il comando richiede stato archiviato e frase esatta, rifiuta timer attivi, elimi
 
 ## Incidenti e accessi
 
-Disabilitare l’account coinvolto, conservare evidenze pertinenti in luogo protetto, esaminare audit/log e seguire la procedura organizzativa definita. Perdita del dispositivo TOTP: usare un codice di recupero e riconfigurare da Sicurezza. Se sono persi anche i codici, serve una procedura amministrativa identificata e tracciata sul server; non esiste una scorciatoia pubblica per bypassare MFA.
+Disabilitare l’account coinvolto, conservare evidenze pertinenti in luogo protetto, esaminare audit/log e seguire la procedura organizzativa definita. Perdita della password: usare il recupero tramite email. Gli interventi amministrativi devono essere identificati e tracciati; non esiste un bypass pubblico dell’autenticazione.

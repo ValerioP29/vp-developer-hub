@@ -1,5 +1,7 @@
 # Report di collaudo — 20 ottobre 2026
 
+> Report storico del collaudo precedente. Per la modifica autenticazione e la correzione pagina bianca del 2 novembre 2026, consultare [IMPLEMENTATION-REPORT.md](../IMPLEMENTATION-REPORT.md). I riferimenti alle vecchie verifiche a due fattori descrivono esclusivamente la release precedente.
+
 Applicazione eseguita realmente nell’ambiente locale con PHP 8.4.25, Laravel 13.37.0, PostgreSQL 16.15 e Node 24.18.0. Dati esclusivamente fittizi. Nessun test eseguito contro servizi o database dei clienti.
 
 ## Esiti

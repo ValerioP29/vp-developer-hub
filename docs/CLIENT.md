@@ -2,7 +2,7 @@
 
 ## Accesso
 
-Ricevi un invito dal tuo referente o dall’amministratore. Imposta la password attraverso il link ricevuto. Non condividere l’account: ogni persona deve usare un accesso nominativo. Per recuperare l’accesso, usa «Password dimenticata?». Dalla scheda del tuo account puoi attivare l’autenticazione a due fattori e conservare i codici di recupero.
+Ricevi un invito dal tuo referente o dall’amministratore. Imposta la password attraverso il link ricevuto. Non condividere l’account: ogni persona deve usare un accesso nominativo. Per recuperare l’accesso, usa «Password dimenticata?». Accedi con email oppure username e password. Lo username appare nella scheda account e può essere comunicato dal referente; il nome visualizzato non è un identificativo di accesso.
 
 L’indirizzo del portale identifica il servizio; la riservatezza dipende dall’account. Non puoi accedere alle aziende degli altri clienti, anche conoscendo l’URL di un’attività.
 

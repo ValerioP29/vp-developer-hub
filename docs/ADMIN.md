@@ -2,7 +2,7 @@
 
 ## Primo accesso
 
-Creare l’account con `php artisan hub:create-admin`. Impostare una password lunga e personale; completare la configurazione TOTP e conservare i codici di recupero fuori dal server. La pagina Sicurezza richiede nuovamente la password dopo la scadenza della conferma. Un Super Admin senza MFA confermata può configurarla, ma non accedere al centro operativo.
+Creare l’account con `php artisan hub:create-admin --username=nome.scelto`. Impostare una password lunga e personale. Accedere con email oppure username e password. Per assegnare uno username a un account esistente usare `php artisan hub:set-username email@azienda.it nome.scelto`: non cambia password, ruolo o tenant. Gli username ammettono 3–64 lettere ASCII, numeri, punti, trattini e underscore, iniziano con una lettera o un numero e sono normalizzati in minuscolo. In Referenti e accessi lo username è visibile e può essere scelto durante l’invito; se omesso, viene generato un identificativo univoco.
 
 ## Avvio di un rapporto
 
@@ -49,4 +49,4 @@ Gli upload sono privati; si accettano PDF, PNG/JPEG, TXT e CSV entro 10 MB. Per 
 
 Sospendere o archiviare un cliente impedisce l’accesso ai suoi referenti mantenendo lo storico. Disabilitare un utente revoca le sessioni memorizzate. L’archiviazione è la procedura ordinaria; la cancellazione definitiva è un’operazione CLI controllata, descritta nella guida privacy.
 
-Il **Registro attività** mostra modifiche, autore e valori prima/dopo; nessun pulsante lo modifica. Le password, i segreti MFA e i percorsi dei file sono esclusi dai valori di audit. I dati liberi possono contenere informazioni personali: evitare contenuti non necessari.
+Il **Registro attività** mostra modifiche, autore e valori prima/dopo; nessun pulsante lo modifica. Le password, i dati di autenticazione riservati e i percorsi dei file sono esclusi dai valori di audit. I dati liberi possono contenere informazioni personali: evitare contenuti non necessari.

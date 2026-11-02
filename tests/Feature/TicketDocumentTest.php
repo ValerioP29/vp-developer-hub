@@ -110,6 +110,6 @@ class TicketDocumentTest extends HubTestCase
     {
         $ticket = $this->ticket();
         $this->actingAs($this->otherClient)->get('/tickets/'.$ticket->id)->assertNotFound();
-        $this->post('/tickets/'.$ticket->id.'/comments',['body' => 'Attack'])->assertNotFound();
+        $this->post('/tickets/'.$ticket->id.'/comments', ['body' => 'Attack'])->assertNotFound();
     }
 }

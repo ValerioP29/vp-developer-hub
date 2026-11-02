@@ -147,6 +147,6 @@ class BillingController extends Controller
             $approval->update(collect($data)->except('confirm')->all() + ['decided_at' => now(), 'decided_by' => auth()->id()]);
         });
 
-        return back()->with('notice','Decisione registrata nel registro attività.');
+        return back()->with('notice', 'Decisione registrata nel registro attività.');
     }
 }

@@ -56,6 +56,6 @@ class TicketController extends Controller
             $notifier->ticket($ticket, 'Stato aggiornato');
         });
 
-        return back()->with('notice','Stato aggiornato.');
+        return back()->with('notice', 'Stato aggiornato.');
     }
 }
